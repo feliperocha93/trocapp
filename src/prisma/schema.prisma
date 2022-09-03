@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int    @id @default(autoincrement())
+  email        String
+  password     String
+  name         String
+  glued_ids    Int?
+  repeated_ids Int?
+}
+
+model Glued {
+  id          Int      @id @default(autoincrement())
+  special     String[]
+  coca_cola   String[]
+  qatar       String[]
+  ecuador     String[]
+  senegal     String[]
+  netherlands String[]
+  england     String[]
+  iran        String[]
+  usa         String[]
+  wales       String[]
+  argentina   String[]
+  arabia      String[]
+  mexico      String[]
+  poland      String[]
+  france      String[]
+  australia   String[]
+  denmark     String[]
+  tunisia     String[]
+  spain       String[]
+  costa_rica  String[]
+  german      String[]
+  japan       String[]
+  belgium     String[]
+  canada      String[]
+  morocco     String[]
+  croatia     String[]
+  brazil      String[]
+  serbia      String[]
+  switzerland String[]
+  cameroon    String[]
+  portugal    String[]
+  ghana       String[]
+  uruaguay    String[]
+  korea       String[]
+}
