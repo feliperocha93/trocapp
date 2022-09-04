@@ -5,8 +5,8 @@ import {createContext, useContext, useEffect, useState} from "react";
 const AuthContext = createContext(undefined);
 
 function AuthProvider({ children }) {
-  const [authenticated, setAuthenticated] = useState(true);
-  const [users, setUsers] = useState([]);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [user, setUser] = useState([]);
 
   const router = useRouter();
 
@@ -21,12 +21,12 @@ function AuthProvider({ children }) {
   }, [authenticated, router])
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/user/5')
-      .then(res => setUsers(res.data))
+    axios.get('http://localhost:3000/api/user/1')
+      .then(res => setUser(res.data))
   }, [])
 
   return (
-    <AuthContext.Provider value={{authenticated, users}}>
+    <AuthContext.Provider value={{authenticated, user}}>
       {children}
     </AuthContext.Provider>
   );
@@ -40,4 +40,4 @@ function useAuthProvider() {
   return context;
 }
 
-export {AuthProvider, useAuthProvider};
+export { AuthProvider, useAuthProvider };
