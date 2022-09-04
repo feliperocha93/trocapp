@@ -1,20 +1,66 @@
-import { useState } from "react";
+import Image from 'next/image';
+
+import CssBaseline from '@mui/material/CssBaseline';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+
+import Logo from '../assets/logo.svg';
+import LoginForm from '../components/LoginForm';
+import useLogin from '../hooks/useLogin';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useAuthProvider } from '../context/authContext';
 
 function Login() {
-  const [name, setName] = useState('');
-  const [pswd, setPswd] = useState('');
+  const [loginSubmitError, setLoginSubmitError] = useState('');
+  const login = useLogin();
+  const router = useRouter();
+  const { autheticated } = useAuthProvider();
 
-  function handleLogin(e) {
-    e.preventDefault();
-    console.log({name, pswd});
+  useEffect(() => {
+    if (autheticated) {
+      router.push('/')
+    }
+  })
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    const error = await login(e);
+    error && setLoginSubmitError(error);
   }
 
   return (
-    <form style={{display: 'flex', flexDirection: 'column', width: '500px', margin: '50px auto', gap: '10px'}}>
-      <input type="text" placeholder="Nome" onChange={(e) => setName(e.target.value)}/>
-      <input type="password" placeholder="Senha" onChange={(e) => setPswd(e.target.value)}/>
-      <button onClick={(e) => handleLogin(e)} type="submit">Login</button>
-    </form>
+    <Grid container component="main" sx={{ height: '100vh' }}>
+      <CssBaseline />
+      <Grid
+        item
+        xs={false}
+        sm={4}
+        md={7}
+        sx={{
+          backgroundImage: 'url(https://source.unsplash.com/random)',
+          backgroundRepeat: 'no-repeat',
+          backgroundColor: (t) =>
+            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Box
+          sx={{
+            my: 8,
+            mx: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Image src={Logo} alt="Trocapp Logo" width={150} />
+          <LoginForm handleSubmit={handleSubmit} error={loginSubmitError} />
+        </Box>
+      </Grid>
+    </Grid>
   );
 }
 

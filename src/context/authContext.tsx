@@ -5,6 +5,7 @@ import {createContext, useContext, useEffect, useState} from "react";
 const AuthContext = createContext(undefined);
 
 function AuthProvider({ children }) {
+  const [token, setToken] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState([]);
 
@@ -21,12 +22,16 @@ function AuthProvider({ children }) {
   }, [authenticated, router])
 
   useEffect(() => {
+    token && setAuthenticated(true);
+  }, [token])
+
+  useEffect(() => {
     axios.get('http://localhost:3000/api/user/1')
       .then(res => setUser(res.data))
   }, [])
 
   return (
-    <AuthContext.Provider value={{authenticated, user}}>
+    <AuthContext.Provider value={{authenticated, setToken, user}}>
       {children}
     </AuthContext.Provider>
   );
