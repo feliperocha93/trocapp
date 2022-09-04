@@ -1,15 +1,13 @@
-import { useAuthProvider } from "../provider/authContext";
+import { useAuthProvider } from "../context/authContext";
 
 interface homeProps {}
 
 function Home(props: homeProps) {
-  const { users } = useAuthProvider();
+  const { user } = useAuthProvider();
 
   return (
     <ul>
-      {users.map(user => (
-        <li key={user}>Name: {user.name}</li>
-      ))}
+      <li key={user}>Name: {user.name}</li>
     </ul>
   );
 }

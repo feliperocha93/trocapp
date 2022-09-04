@@ -1,11 +1,13 @@
-import { AuthProvider } from "../provider/authContext";
+import { AuthProvider } from "../context/authContext";
 import { AppProps } from "next/app";
-import "../styles/globals.css";
+import { TrocappThemeProvider } from "../context/themeContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
-      <Component {...pageProps} />
+      <TrocappThemeProvider>
+        <Component {...pageProps} />
+      </TrocappThemeProvider>
     </AuthProvider>
   );
 }

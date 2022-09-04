@@ -3,9 +3,9 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const getUsers = async (res: NextApiResponse) => {
-  const users = await prisma.user.findMany();
-  res.json(users);
+const getUser = async (res: NextApiResponse, id: number) => {
+  const user = await prisma.user.findUnique({ where: { id } });
+  res.json(user);
 };
 
 export default async function userHandler(
@@ -13,13 +13,12 @@ export default async function userHandler(
   res: NextApiResponse
 ) {
   const {
-    query: { id, name },
+    query: { id },
     method,
   } = req;
 
   const methods = {
-    get: await getUsers(res),
-    put: () => res.status(200).json({ id, name: name || `User ${id}` }),
+    get: await getUser(res, Number(id)),
     default: () => {
       res.setHeader("Allow", ["GET", "PUT"]);
       res.status(405).end(`Method ${method} Not Allowed`);
