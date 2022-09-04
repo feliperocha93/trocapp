@@ -8,14 +8,17 @@ const getUsers = async (res: NextApiResponse) => {
   res.json(users);
 };
 
-export default function userHandler(req: NextApiRequest, res: NextApiResponse) {
+export default async function userHandler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const {
     query: { id, name },
     method,
   } = req;
 
   const methods = {
-    get: getUsers(res),
+    get: await getUsers(res),
     put: () => res.status(200).json({ id, name: name || `User ${id}` }),
     default: () => {
       res.setHeader("Allow", ["GET", "PUT"]);
