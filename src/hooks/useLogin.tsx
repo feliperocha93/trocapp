@@ -23,7 +23,14 @@ const useLogin = () => {
     }
   };
 
-  return login;
+  // TODO: Implements this methods
+  const logout = () => {
+    // 1. Remove token
+    // 2. Clean user object On AuthProvider
+    // 3. Redirect to '/login' page
+  }
+
+  return { login, logout };
 }
 
 export default useLogin;
