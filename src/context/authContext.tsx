@@ -1,37 +1,28 @@
-import axios from "axios";
-import { useRouter } from "next/router";
+import jwt_decode from 'jwt-decode';
+import { useRouter } from 'next/router';
 import {createContext, useContext, useEffect, useState} from "react";
 
 const AuthContext = createContext(undefined);
 
 function AuthProvider({ children }) {
-  const [token, setToken] = useState('');
-  const [authenticated, setAuthenticated] = useState(false);
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState(undefined);
 
   const router = useRouter();
 
   useEffect(() => {
-    if (
-      !authenticated &&
-      router.pathname !== '/login' &&
-      router.pathname !== '/_error'
-    ) {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      //TODO: Check on api if token is valid
+      const user = jwt_decode(token);
+      setUser(user);
+    } else {
       router.push('/login');
     }
-  }, [authenticated, router])
-
-  useEffect(() => {
-    token && setAuthenticated(true);
-  }, [token])
-
-  useEffect(() => {
-    axios.get('http://localhost:3000/api/user/1')
-      .then(res => setUser(res.data))
-  }, [])
+  }, [router])
 
   return (
-    <AuthContext.Provider value={{authenticated, setToken, user}}>
+    <AuthContext.Provider value={{user, setUser}}>
       {children}
     </AuthContext.Provider>
   );

@@ -14,20 +14,25 @@ import { useAuthProvider } from '../context/authContext';
 
 function Login() {
   const [loginSubmitError, setLoginSubmitError] = useState('');
-  const login = useLogin();
+
+  const { user } = useAuthProvider();
+  const { login } = useLogin();
   const router = useRouter();
-  const { autheticated } = useAuthProvider();
 
   useEffect(() => {
-    if (autheticated) {
+    if (user) {
       router.push('/')
     }
-  })
+  }, [user, router])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    // TODO: Implements a loadder behavior when user is loggins
     const error = await login(e);
     error && setLoginSubmitError(error);
   }
+
+  // TODO: solve the issue -> Use can see login page before redirect
+  if (user) return;
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>

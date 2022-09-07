@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
+import jwt from "jwt-simple";
 
 const prisma = new PrismaClient();
 
@@ -13,16 +14,14 @@ const login = async (res: NextApiResponse, params: loginParams) => {
   const user = await prisma.user.findUnique({ where: { email } });
 
   if (!user || user.password !== password) {
-    return res
-      .status(400)
-      .json({
-        error: "Este e-mail não está cadastrado ou a senha está errada.",
-      });
+    return res.status(400).json({
+      error: "Este e-mail não está cadastrado ou a senha está errada.",
+    });
   }
 
-  // delete user.password;
-  // const token = jwt.encode(user, 'segredo');
-  res.status(200).json({ token: true });
+  delete user.password;
+  const token = jwt.encode(user, process.env.SECRET);
+  res.status(200).json({ token });
 };
 
 export default async function userHandler(
