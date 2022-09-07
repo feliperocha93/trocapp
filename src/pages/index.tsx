@@ -1,9 +1,9 @@
 import { useAuthProvider } from "../context/authContext";
 
-interface homeProps {}
-
-function Home(props: homeProps) {
+function Home() {
   const { user } = useAuthProvider();
+
+  if (!user) return;
 
   return (
     <ul>
